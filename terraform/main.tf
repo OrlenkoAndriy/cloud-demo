@@ -122,3 +122,10 @@ resource "aws_instance" "wp-app-server" {
     Name = "wp-app"
   }
 }
+
+resource "local_file" "prometheus-config" {
+  content  = templatefile("prometheus.tmpl", {
+    vm_ip    = aws_instance.wp-app-server.public_ip,
+  })
+  filename = "prometheus.yml"
+}
