@@ -11,7 +11,7 @@ RUN chown -R wp-app:wp-app /var/www/wordpress
 
 COPY ./configs/wp-app.conf /etc/php/7.4/fpm/pool.d/wp-app.conf
 COPY ./configs/nginx /etc/nginx/sites-available/default
-COPY ./configs/supervisord.conf /etc/sxupervisord.conf
+COPY ./configs/supervisord.conf /etc/supervisord.conf
 
 CMD ["/usr/bin/supervisord", "-n"]
 EXPOSE 80
