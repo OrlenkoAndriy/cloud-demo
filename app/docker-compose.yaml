@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  wp-app:
+    image: orlenkoandirj/wp-app:last
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+
+  wp-mysql:
+    image: mysql:8.0
+    volumes:
+      - wp-mysql-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: wordpress
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+
+  wp-monitoring:
+    image: prom/node-exporter:latest
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    expose:
+      - 9100
+
+volumes:
+  wp-mysql-data:
